@@ -13,6 +13,8 @@ from app.services.task_service import (
     delete_task,
 )
 from app.models.user import User
+from app.core.rbac import can_view_task, can_edit_task, can_delete_task
+from app.core.roles import Roles
 
 router = APIRouter()
 
@@ -23,6 +25,7 @@ def create_task_endpoint(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    # user / manager / admin — все могут создавать
     return create_task(db, creator_id=current_user.id, data=data)
 
 
@@ -31,7 +34,15 @@ def list_tasks(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return get_tasks(db, creator_id=current_user.id)
+    # admin/manager видят все задачи
+    if current_user.role in (Roles.ADMIN, Roles.MANAGER):
+        tasks = get_tasks(db)
+    else:
+        # обычный user видит только свои + где он assignee
+        tasks = get_tasks(db, creator_id=current_user.id)
+        # если хочешь учитывать assignee — нужно дописать фильтр в сервисе
+
+    return tasks
 
 
 @router.get("/{task_id}", response_model=TaskRead)
@@ -43,7 +54,8 @@ def get_task_endpoint(
     task = get_task(db, task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    if UUID(str(task.creator_id)) != UUID(str(current_user.id)):
+
+    if not can_view_task(current_user, task):
         raise HTTPException(status_code=403, detail="Forbidden")
 
     return task
@@ -59,7 +71,8 @@ def update_task_endpoint(
     task = get_task(db, task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    if UUID(str(task.creator_id)) != UUID(str(current_user.id)):
+
+    if not can_edit_task(current_user, task):
         raise HTTPException(status_code=403, detail="Forbidden")
 
     return update_task(db, task, data)
@@ -74,7 +87,8 @@ def delete_task_endpoint(
     task = get_task(db, task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    if UUID(str(task.creator_id)) != UUID(str(current_user.id)):
+
+    if not can_delete_task(current_user, task):
         raise HTTPException(status_code=403, detail="Forbidden")
 
     delete_task(db, task)
