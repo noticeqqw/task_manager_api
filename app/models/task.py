@@ -18,6 +18,7 @@ class Task(Base):
     __tablename__ = "tasks"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    idempotency_key = Column(String, unique=True, nullable=True, index=True)
 
     title = Column(String, nullable=False)
     description = Column(Text, nullable=True)

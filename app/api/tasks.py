@@ -1,6 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Header
 from sqlalchemy.orm import Session
 from uuid import UUID
+from typing import Optional
 
 from app.db.deps import get_db
 from app.api.deps_auth import get_current_user
@@ -11,6 +12,7 @@ from app.services.task_service import (
     get_tasks,
     update_task,
     delete_task,
+    get_task_by_idempotency_key,
 )
 from app.models.user import User
 from app.core.rbac import can_view_task, can_edit_task, can_delete_task
@@ -24,9 +26,16 @@ def create_task_endpoint(
     data: TaskCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    idempotency_key: Optional[str] = Header(None, alias="Idempotency-Key"),
 ):
+    # Проверка на дубликат по idempotency key
+    if idempotency_key:
+        existing_task = get_task_by_idempotency_key(db, idempotency_key)
+        if existing_task:
+            return existing_task
+    
     # user / manager / admin — все могут создавать
-    return create_task(db, creator_id=current_user.id, data=data)
+    return create_task(db, creator_id=current_user.id, data=data, idempotency_key=idempotency_key)
 
 
 @router.get("/", response_model=list[TaskRead])

@@ -16,10 +16,10 @@ class TaskCreate(TaskBase):
 
 
 class TaskUpdate(BaseModel):
-    title: Optional[str]
-    description: Optional[str]
-    status: Optional[str]
-    assignee_id: Optional[UUID]
+    title: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[str] = None
+    assignee_id: Optional[UUID] = None
 
 
 class TaskRead(TaskBase):
