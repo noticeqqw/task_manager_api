@@ -9,7 +9,6 @@ class AsyncKafkaEventProducer:
         self.producer: Optional[AIOKafkaProducer] = None
     
     async def start(self):
-        """Инициализация producer"""
         self.producer = AIOKafkaProducer(
             bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
             client_id='task-manager-async-producer',
@@ -20,13 +19,11 @@ class AsyncKafkaEventProducer:
         print("Async Kafka Producer started")
     
     async def stop(self):
-        """Остановка producer"""
         if self.producer:
             await self.producer.stop()
             print("Async Kafka Producer stopped")
     
     async def publish_event(self, topic: str, event_type: str, payload: Dict[str, Any]):
-        """Публикация события в Kafka"""
         if not self.producer:
             print("Producer not started, cannot publish event")
             return

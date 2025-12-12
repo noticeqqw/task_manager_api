@@ -11,7 +11,6 @@ from app.core.config import settings
 
 
 def _publish_task_event(event_type: str, task: Task):
-    """Публикация события задачи в Kafka (синхронная обертка)"""
     assignee_id_value = task.assignee_id
     payload = {
         "task_id": str(task.id),
@@ -77,7 +76,6 @@ def get_task(db: Session, task_id: UUID):
 
 
 def get_task_by_idempotency_key(db: Session, idempotency_key: str):
-    """Получение задачи по idempotency key для предотвращения дублирования"""
     return db.query(Task).filter(Task.idempotency_key == idempotency_key).first()
 
 

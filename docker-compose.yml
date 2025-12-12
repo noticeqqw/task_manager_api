@@ -67,6 +67,17 @@ services:
       timeout: 5s
       retries: 5
 
+  frontend:
+    build: ./frontend
+    container_name: task_manager_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - api
+
 volumes:
   db_data:
   zookeeper_data:

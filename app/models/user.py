@@ -18,4 +18,4 @@ class User(Base):
 
     team_id = Column(UUID(as_uuid=True), ForeignKey("teams.id"), nullable=True)
 
-    team = relationship("Team", back_populates="users")
+    team = relationship("Team", back_populates="users", foreign_keys=[team_id])

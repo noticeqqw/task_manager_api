@@ -12,7 +12,6 @@ class KafkaEventProducer:
         })
     
     def publish_event(self, topic: str, event_type: str, payload: Dict[str, Any]):
-        """Публикация события в Kafka"""
         message = {
             'event_type': event_type,
             'payload': payload
@@ -30,14 +29,12 @@ class KafkaEventProducer:
             print(f"Failed to publish event to Kafka: {e}")
     
     def _delivery_callback(self, err, msg):
-        """Callback для проверки доставки сообщения"""
         if err:
             print(f"Message delivery failed: {err}")
         else:
             print(f"Message delivered to {msg.topic()} [{msg.partition()}]")
     
     def flush(self):
-        """Ожидание отправки всех сообщений"""
         self.producer.flush()
 
 
