@@ -1,19 +1,26 @@
-# 📋 Task Manager API
+# Task Manager API
+
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.124.2-009688.svg)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791.svg)](https://www.postgresql.org/)
+[![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-Latest-231F20.svg)](https://kafka.apache.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-red.svg)](https://www.sqlalchemy.org/)
 
 Современный REST API для управления задачами с поддержкой команд, ролей и асинхронной обработки событий через Apache Kafka.
 
-## ✨ Возможности
+## Возможности
 
-- 🔐 **Аутентификация и авторизация** - JWT токены с поддержкой refresh tokens
-- 👥 **Система команд** - создание команд, управление участниками и ролями
-- ✅ **Управление задачами** - CRUD операции, назначение исполнителей, статусы
-- 🎭 **Ролевая модель** - Owner, Manager, User с различными правами доступа
-- 📡 **Webhooks** - отправка уведомлений о событиях во внешние системы
-- 🚀 **Асинхронная обработка** - Apache Kafka для событийно-ориентированной архитектуры
-- 📊 **Панель администратора** - управление пользователями и командами
-- 🐳 **Docker Ready** - полная контейнеризация приложения
+- **Аутентификация и авторизация** - JWT токены с поддержкой refresh tokens
+- **Система команд** - создание команд, управление участниками и ролями
+- **Управление задачами** - CRUD операции, назначение исполнителей, статусы
+- **Ролевая модель** - Owner, Manager, User с различными правами доступа
+- **Webhooks** - отправка уведомлений о событиях во внешние системы
+- **Асинхронная обработка** - Apache Kafka для событийно-ориентированной архитектуры
+- **Панель администратора** - управление пользователями и командами
+- **Docker Ready** - полная контейнеризация приложения
 
-## 🛠 Технологический стек
+## Технологический стек
 
 - **Framework**: FastAPI 0.124.2
 - **Database**: PostgreSQL 15 + SQLAlchemy 2.0
@@ -24,7 +31,7 @@
 - **Async HTTP**: aiohttp + aiokafka
 - **Validation**: Pydantic 2.12
 
-## 📁 Структура проекта
+## Структура проекта
 
 ```
 task_manager/
@@ -108,7 +115,7 @@ DELETE /admin/users/{id}       # Удаление пользователя
 GET    /admin/teams            # Список всех команд
 ```
 
-## 🎭 Система ролей
+## Система ролей
 
 ### В команде
 
@@ -124,18 +131,10 @@ GET    /admin/teams            # Список всех команд
 - Просмотр и управление всеми командами
 - Доступ к панели администратора
 
-## 🔐 Безопасность
+## Безопасность
 
 - **Хеширование паролей**: Argon2 (основной) + Bcrypt (fallback)
 - **JWT токены**: Access (30 мин) + Refresh (7 дней)
 - **CORS**: Настраиваемые allowed origins
 - **SQL Injection**: Защита через SQLAlchemy ORM
 - **Валидация**: Pydantic schemas для всех входных данных
-
-## 📄 Лицензия
-
-MIT License
-
-## 👨‍💻 Автор
-
-Стас Басов
