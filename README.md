@@ -138,3 +138,5 @@ GET    /admin/teams            # Список всех команд
 - **CORS**: Настраиваемые allowed origins
 - **SQL Injection**: Защита через SQLAlchemy ORM
 - **Валидация**: Pydantic schemas для всех входных данных
+
+--
